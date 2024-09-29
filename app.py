@@ -73,6 +73,11 @@ def init(method):
     k = int(data.get('value', 4))
     if method == 'initrandom':
         centroids = km.init_random(points, k)
+    if method == 'initfarthest':
+        centroids = km.init_far(points, k)
+    if method == 'initkmeans':
+        centroids = km.init_kmeans(points, k)
+    #if method == 'initmanual':
     return jsonify({'status': 'success'})
 
 @app.route('/km_step', methods=['POST'])
@@ -107,6 +112,8 @@ def conv():
 
 @app.route('/km_rest', methods=['POST'])
 def rest():
+    global points
+    points = km.reset_points(points)
     return jsonify({'status': 'success'})
 
 @app.route('/get_plot')

@@ -32,6 +32,12 @@ def step_centroids(points, centroids):
             newc.append(centroids[c])
     return newc
 
+def reset_points(points):
+    newp = []
+    for p in points:
+        newp.append((p[0], p[1], -1))
+    return newp
+
 def generate_dataset(n):
     print("meow2")
     points = []
@@ -44,4 +50,21 @@ def init_random(points, n):
 
     while len(cent) < n:
         cent.add(points[random.randint(0, len(points)-1)])
+    return list(cent)
+
+def init_far(points, n):
+    cent = {(points[random.randint(0, len(points)-1)])}
+    while len(cent) < n:
+        maxdist = maxp = 0
+        for p in range(len(points)):
+            mind = dist(points[p], list(cent)[0])
+            for c in cent:
+                d = dist(points[p], c)
+                if d < mind:
+                    mind = d
+            if mind > maxdist:
+                maxdist = mind
+                maxp = p
+        cent.add(points[maxp])
+
     return list(cent)

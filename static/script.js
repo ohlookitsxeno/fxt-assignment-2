@@ -42,8 +42,19 @@ $('#km-conv').click(function() {
 
 $('#km-rest').click(function() {
     $.post('/km_rest', function(response) {
-        console.log('Converging called successfully');
+        console.log('Reset called successfully');
     });
+
+    let sel = document.getElementById('init_method').value;
+    let k = document.getElementById('num_clusters').value;
+    fetch(`/initialize/${sel}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ value: k })
+    });
+
     get_plot();
 });
 
