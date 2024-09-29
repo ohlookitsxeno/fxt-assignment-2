@@ -68,3 +68,19 @@ def init_far(points, n):
         cent.add(points[maxp])
 
     return list(cent)
+
+def init_kmeans(points, n):
+    cent = {(points[random.randint(0, len(points)-1)])}
+
+    while len(cent) < n:
+        dists = []
+        for p in range(len(points)):
+            mind = dist(points[p], list(cent)[0])
+            for c in cent:
+                d = dist(points[p], c)
+                if d < mind:
+                    mind = d
+            dists.append(mind)
+        psel = random.choices(points, weights=dists, k=1)[0]
+        cent.add(psel)
+    return list(cent)
