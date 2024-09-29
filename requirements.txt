@@ -1,3 +1,5 @@
 flask
 numpy
+plotly
+pandas
 matplotlib

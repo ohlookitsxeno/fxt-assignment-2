@@ -4,11 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KMeans</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <h1>KMeans Clustering Algorithm</h1>
-
-    <img id="plot" src="/plot.png" alt="Plot" style="border: 1px solid black;">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6 text-center">KMeans Clustering Algorithm</h1>
     
-    <script src="/static/script.js"></script>
+        <div class="flex flex-col md:flex-row justify-center items-center mb-6">
+            <label for="num_points" class="text-lg mb-2 md:mb-0 md:mr-4">Number of Points</label>
+            <input id="num_points" type="number" value="128" class="border border-gray-300 rounded-md px-4 py-2 md:mr-4">
+            <button id="gen-data" class="bg-[#ED5443] text-white font-bold py-2 px-6 rounded-md hover:bg-[#A02E21]">
+                Generate New Dataset
+            </button>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-center items-center mb-6">
+            <label for="init_method" class="block text-lg mb-2 md:mr-4">Initialization Method:</label>
+            <select id="init_method" class="border border-gray-300 p-2 md:mr-4 rounded">
+                <option value="initrandom">Random</option>
+                <option value="initfarthest">Farthest First</option>
+                <option value="initkmeans">KMeans++</option>
+                <option value="initmanual">Manual</option>
+            </select>
+            <label for="num_clusters" class="text-lg mb-2 md:mb-0 md:mr-4">Number of Clusters (k)</label>
+            <input id="num_clusters" type="number" value="4" class="border border-gray-300 rounded-md px-4 py-2">
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-center items-center mb-6">
+            <button id="km-step" class="bg-[#ED5443] text-white font-bold py-2 px-6 rounded-md hover:bg-[#A02E21] md:mr-4">
+                Step Through KMeans
+            </button>
+            <button id="km-conv" class="bg-[#ED5443] text-white font-bold py-2 px-6 rounded-md hover:bg-[#A02E21] md:mr-4">
+                Run to Convergence
+            </button>
+            <button id="km-rest" class="bg-[#ED5443] text-white font-bold py-2 px-6 rounded-md hover:bg-[#A02E21] md:mr-4">
+                Reset Algorithm
+            </button>
+        </div>
+    
+        <div class="flex justify-center">
+            <div id="plotly-div" class="border border-gray-300 rounded-lg p-3 w-full flex-shrink-0" style="height: 500px;"></div>
+        </div>
+    </div>    
+    <script src="static/script.js"></script>
 </body>
