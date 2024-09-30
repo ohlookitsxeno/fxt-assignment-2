@@ -92,7 +92,7 @@ d3.select('#plotly-div').on('click', function(d, i) {
 
     console.log(xc)
     console.log(yc)
-    // Send the coordinates to the backend
+    
     fetch('/new_centroid', {
         method: 'POST',
         headers: {
