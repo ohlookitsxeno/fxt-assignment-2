@@ -1,3 +1,5 @@
+var plotDiv = document.getElementById('plotly-div');
+
 function get_plot(){
     $.getJSON('/get_plot', function(data){
         Plotly.newPlot('plotly-div', data.data, data.layout);
@@ -75,3 +77,28 @@ function sendInit() {
 
     get_plot();
 }
+
+
+
+d3.select('#plotly-div').on('click', function(d, i) {
+    console.log("click!!");
+
+    console.log(d3.event);
+    var e = d3.event;
+    //using solution for finding coordinates from https://discord.com/channels/1281248353752977418/1289750019263696907/1289975646398713947
+    var bgrect = document.getElementsByClassName('gridlayer')[0].getBoundingClientRect();
+    var xc = ((e.x - bgrect['x']) / (bgrect['width'])) * (plotDiv.layout.xaxis.range[1] - plotDiv.layout.xaxis.range[0]) + plotDiv.layout.xaxis.range[0];
+    var yc = ((e.y - bgrect['y']) / (bgrect['height'])) * (plotDiv.layout.yaxis.range[0] - plotDiv.layout.yaxis.range[1]) + plotDiv.layout.yaxis.range[1];
+
+    console.log(xc)
+    console.log(yc)
+    // Send the coordinates to the backend
+    fetch('/new_centroid', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ x: xc, y: yc })
+    });
+    get_plot();
+});

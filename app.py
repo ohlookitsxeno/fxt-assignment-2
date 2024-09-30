@@ -12,6 +12,7 @@ app = Flask(__name__)
 points = km.generate_dataset(128)
 
 centroids = km.init_random(points, 4)
+manual = False
 
 def colors(col):
     maxcol = float(max(col))
@@ -40,17 +41,21 @@ def plotter():
         marker=dict(color=cols, size=8, line=dict(width=2, color='#444444')),
         name='Points'
     )
+    data = [points_trace]
 
-    ccols = colors(range(len(centroids)))
+    if len(centroids) > 0:
+        ccols = colors(range(len(centroids)))
 
-    centroids_trace = go.Scatter(
-        x=[c[0] for c in centroids],
-        y=[c[1] for c in centroids],
-        mode='markers',
-        marker=dict(color=ccols, size=16, symbol='x', line=dict(width=2, color='#444444')),
-        name='Centroids'
-    )
-    data = [points_trace, centroids_trace]
+        centroids_trace = go.Scatter(
+            x=[c[0] for c in centroids],
+            y=[c[1] for c in centroids],
+            mode='markers',
+            marker=dict(color=ccols, size=16, symbol='x', line=dict(width=2, color='#444444')),
+            name='Centroids'
+        )
+    
+    
+        data = [points_trace, centroids_trace]
 
     layout = go.Layout(
         title="KMeans Clusturing",
@@ -67,8 +72,9 @@ def index():
 
 @app.route('/initialize/<method>', methods=['POST'])
 def init(method):
-    global centroids
+    global centroids, manual
     print("meow")
+    manual = False
     data = request.get_json()
     k = int(data.get('value', 4))
     if method == 'initrandom':
@@ -77,7 +83,9 @@ def init(method):
         centroids = km.init_far(points, k)
     if method == 'initkmeans':
         centroids = km.init_kmeans(points, k)
-    #if method == 'initmanual':
+    if method == 'initmanual':
+        manual = True
+        centroids = []
     return jsonify({'status': 'success'})
 
 @app.route('/km_step', methods=['POST'])
@@ -120,6 +128,15 @@ def rest():
 def plotimg():
     print("meow")
     return plotter()
+
+@app.route('/new_centroid', methods=['POST'])
+def new_cent():
+    data = request.get_json()
+    x = data.get('x')
+    y = data.get('y')
+    if manual:
+        centroids.append((x,y,-1))
+    return jsonify({'status': 'success'})
 
 @app.route('/gen_data', methods=['POST'])
 def regen_data():
